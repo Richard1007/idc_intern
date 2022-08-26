@@ -1,0 +1,13 @@
+# idc_intern
+
+### 调数方法：
+#### 1. 根据已有的channelmix和province总和，给每个省按相应的比例分配
+#### 2. 对齐channel的topline，从总和最小到大的顺序update（除最大的channel外）。方法是将这个channel的所有数 * coefficient
+#### 3. 对于最大的channel， 用province的topline减去已有的其他channel，这样可以保证满足两个topline。同时也用到了初始channlemix
+
+### Future Works
+#### 1.当所需要的coefficient过大时，可能需要调大很多倍，也就可能出现最大channel不够减出现负数的情况
+#### 2.需要一次性读取很多个channelmix和topline，而不是一个segment/quarter/product；可能需要用merge解决
+
+
+
