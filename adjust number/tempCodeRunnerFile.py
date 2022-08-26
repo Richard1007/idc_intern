@@ -1,1 +1,1 @@
-print(sum_channel)
+print('all_prov',all_prov)

@@ -50,10 +50,7 @@ order=[]
 min_index = []
 sort = sorted(target_channel)
 for i in range(len(target_channel)):
-    if sort.index(target_channel[i]) in order:
-        order.append(sort.index(target_channel[i])+1)
-    else:
-        order.append(sort.index(target_channel[i]))
+    order.append(sort.index(target_channel[i]))
 print('order',order)
 for i in range(len(target_channel)):
     min_index.append(order.index(i))
@@ -62,14 +59,13 @@ print('此时channel sum的大小:',order,'更新顺序:', min_index)
 
 # 按照channel总和算出需要的coefficient，相乘之后得到满足条件的sum of a channel 
 for index in min_index[:-1]:
-    target = target_channel[index]
+    target = all_prov[-1][index]
     # print('target',target)
-    if (target != 0) and (sum_channel[index] != 0):   
-        coefficient = target/sum_channel[index]
-        print('channel需要*的系数:', coefficient)
+    coefficient = target/sum_channel[index]
+    print('channel需要*的系数:', coefficient)
     
-        for n in range(len(all_prov)-1):
-            all_prov[n][index] = all_prov[n][index] * coefficient
+    for n in range(len(all_prov)-1):
+        all_prov[n][index] = all_prov[n][index] * coefficient
 
 
 # The largest channel is not yet distributed, last是最大的channel的index

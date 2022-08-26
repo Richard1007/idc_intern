@@ -8,6 +8,7 @@ data = pd.read_excel('adjust number/adjust.xlsx')
 columns = ['Direct - Inbound/Outbound','Direct - Internet','Direct - Store','InDirect - Dealer/VAR/SI','InDirect - eTailer','InDirect - LFR','InDirect - Retail','InDirect - Telco']
 all_prov = []
 sum_prov = []
+print(data.head(5))
 
 
 # all_prov is a list of lists, consisting of the value of every channel of a province
@@ -31,7 +32,7 @@ print('Target sum of every province:',sum_prov)
 # target sum of every channel (topline)
 target_channel = all_prov[-1]
 print('Target sum of every channel :',target_channel)
-
+print('all_prov',all_prov)
 
 
 # 此时每个channel的和
@@ -48,28 +49,23 @@ print('此时每个channel的和:',sum_channel)
 # order是现在channel sum的大小顺序，min_index是需要被更新的column顺序
 order=[]
 min_index = []
-sort = sorted(target_channel)
-for i in range(len(target_channel)):
-    if sort.index(target_channel[i]) in order:
-        order.append(sort.index(target_channel[i])+1)
-    else:
-        order.append(sort.index(target_channel[i]))
-print('order',order)
-for i in range(len(target_channel)):
+sort = sorted(sum_channel)
+for i in range(len(sum_channel)):
+    order.append(sort.index(sum_channel[i]))
+for i in range(len(sum_channel)):
     min_index.append(order.index(i))
 print('此时channel sum的大小:',order,'更新顺序:', min_index)
 
 
 # 按照channel总和算出需要的coefficient，相乘之后得到满足条件的sum of a channel 
 for index in min_index[:-1]:
-    target = target_channel[index]
+    target = all_prov[-1][index]
     # print('target',target)
-    if (target != 0) and (sum_channel[index] != 0):   
-        coefficient = target/sum_channel[index]
-        print('channel需要*的系数:', coefficient)
+    coefficient = target/sum_channel[index]
+    print('channel需要*的系数:', coefficient)
     
-        for n in range(len(all_prov)-1):
-            all_prov[n][index] = all_prov[n][index] * coefficient
+    for n in range(len(all_prov)-1):
+        all_prov[n][index] = all_prov[n][index] * coefficient
 
 
 # The largest channel is not yet distributed, last是最大的channel的index
@@ -92,15 +88,6 @@ worksheet = workbook.add_worksheet()
 for i in range(len(all_prov)-1):
     for n in range(len(all_prov[-1])):
         worksheet.write(i, n, all_prov[i][n])
-
-next_row = len(all_prov)-1
-worksheet.write(next_row, n, 'new_channelmix')
-next_row += 1
-
-for i in range(len(all_prov)-1):
-    for n in range(len(all_prov[-1])):
-        worksheet.write(i+next_row, n, all_prov[i][n]/sum_prov[i])
-
 workbook.close()
 
 # Potential Problems: negaive numbers, decimal places 
